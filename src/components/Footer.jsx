@@ -1,21 +1,37 @@
 import { IconDroplet } from './icons/ServiceIcons'
+import { CONTACT_INFO } from '../data/content'
 
 const FOOTER_LINKS = [
   {
-    title: 'Navigate',
+    title: 'Navigation',
     links: [
       { label: 'Home', href: '#home' },
       { label: 'About', href: '#about' },
       { label: 'Services', href: '#services' },
-      { label: 'Contact', href: '#contact' },
+      { label: 'Events', href: '#events' },
+      { label: 'Careers', href: '#careers' },
+      { label: 'Community', href: '#community' },
     ],
   },
   {
-    title: 'Initiatives',
+    title: 'Our Services',
     links: [
+      { label: 'EduGlobe', href: '#services' },
+      { label: 'Digital Ads Pro', href: '#services' },
       { label: 'Medi AI Informatics', href: '#initiatives' },
-      { label: 'Healthcare Education', href: '#services' },
-      { label: 'AI Training', href: '#services' },
+      { label: 'In-Home Wellness', href: '#services' },
+      { label: 'Holistic Wellbeing', href: '#services' },
+      { label: 'Leadership Programs', href: '#services' },
+    ],
+  },
+  {
+    title: 'Resources',
+    links: [
+      { label: 'Blog', href: '#' },
+      { label: 'Newsroom', href: '#' },
+      { label: 'Webinars', href: '#events' },
+      { label: 'Careers', href: '#careers' },
+      { label: 'Community', href: '#community' },
     ],
   },
 ]
@@ -59,20 +75,33 @@ export default function Footer() {
 
           <div>
             <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-brand-300/80">
-              Connect
+              Get in Touch
             </p>
             <ul className="mt-4 space-y-3 text-sm text-white/65">
               <li>
-                <a href="mailto:jvedtech@gmail.com" className="transition hover:text-brand-300">
-                  jvedtech@gmail.com
+                <a href={`mailto:${CONTACT_INFO.email}`} className="transition hover:text-brand-300">
+                  {CONTACT_INFO.email}
                 </a>
               </li>
               <li>
-                <a href="tel:+918655607721" className="transition hover:text-brand-300">
-                  +91 86556 07721
+                <a href={`tel:${CONTACT_INFO.phone.replace(/\s/g, '')}`} className="transition hover:text-brand-300">
+                  {CONTACT_INFO.phone}
                 </a>
               </li>
-              <li>Mumbai, India</li>
+              <li className="text-white/50 text-xs">
+                {CONTACT_INFO.address}
+              </li>
+              <li className="mt-3 pt-3 border-t border-white/10">
+                <a 
+                  href={CONTACT_INFO.whatsapp}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-brand-300 hover:text-brand-200 transition font-semibold flex items-center gap-2"
+                >
+                  <span>Join WhatsApp Community</span>
+                  <span>→</span>
+                </a>
+              </li>
             </ul>
           </div>
         </div>

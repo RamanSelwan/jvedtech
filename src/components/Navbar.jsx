@@ -6,7 +6,11 @@ const LINKS = [
   { href: '#home', label: 'Home' },
   { href: '#about', label: 'About' },
   { href: '#services', label: 'Services' },
-  { href: '#initiatives', label: 'Medi AI' },
+  { href: '#achievements', label: 'Impact' },
+  { href: '#testimonials', label: 'Testimonials' },
+  { href: '#events', label: 'Events' },
+  { href: '#careers', label: 'Careers' },
+  { href: '#community', label: 'Community' },
   { href: '#contact', label: 'Contact' },
 ]
 

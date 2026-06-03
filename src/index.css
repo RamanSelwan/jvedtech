@@ -35,16 +35,28 @@
   }
 
   body {
-    @apply bg-black text-white antialiased;
+    @apply text-white antialiased;
+    min-height: 100vh;
+    background: radial-gradient(circle at 10% 20%, rgba(78,205,196,0.18), transparent 18%),
+      radial-gradient(circle at 90% 10%, rgba(126,200,227,0.12), transparent 25%),
+      linear-gradient(180deg, #04120f 0%, #081f17 65%, #05110d 100%);
+    background-attachment: fixed;
     font-family: var(--font-sans);
   }
 
   html {
-    @apply bg-black;
+    background: transparent;
   }
 
   ::selection {
     @apply bg-brand-300/50 text-brand-900;
+  }
+}
+
+@layer utilities {
+  .app-shell {
+    min-height: 100vh;
+    background: transparent;
   }
 }
 
