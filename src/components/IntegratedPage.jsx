@@ -13,7 +13,7 @@ export default function IntegratedPage() {
   useScrollReveal()
 
   return (
-    <main className="relative overflow-hidden">
+    <main className="relative overflow-hidden bg-black">
       <section id="home">
         <HomeScreen />
       </section>

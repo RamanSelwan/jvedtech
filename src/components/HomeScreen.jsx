@@ -1,428 +1,126 @@
-import { useState, useEffect, useRef } from "react";
+import { useEffect, useRef } from 'react'
+import gsap from 'gsap'
+import Button from './ui/Button'
 
-const NAV_ITEMS = ["WATCH DEMO", "EXPLORE COURSES", "MY DASHBOARD"];
+const USE_VIDEO_BACKGROUND = true
+const HERO_VIDEO_SRC = '/bg-video.mp4'
 
-const COURSES = [
-  { title: "AI & Machine Learning", level: "Intermediate", duration: "8 weeks", color: "#4ecdc4" },
-  { title: "Data Science Fundamentals", level: "Beginner", duration: "6 weeks", color: "#88d8b0" },
-  { title: "Deep Learning Specialization", level: "Advanced", duration: "12 weeks", color: "#45b7d1" },
-  { title: "Python for AI", level: "Beginner", duration: "4 weeks", color: "#96c93d" },
-  { title: "Natural Language Processing", level: "Advanced", duration: "10 weeks", color: "#6bcfb8" },
-  { title: "Computer Vision", level: "Intermediate", duration: "8 weeks", color: "#a8e6cf" },
-];
+const headingWords = [
+  { text: 'Redefining Global', className: '' },
+  {
+    text: 'Healthcare Learning.',
+    className:
+      'bg-gradient-to-r from-brand-300 via-brand-400 to-brand-300 bg-clip-text text-transparent',
+  },
+  { text: 'Where compassion meets technology.', className: 'italic text-white/90' },
+]
 
-function useInView(threshold = 0.1) {
-  const ref = useRef(null);
-  const [inView, setInView] = useState(false);
+export default function HomeScreen() {
+  const sectionRef = useRef(null)
+  const videoRef = useRef(null)
 
   useEffect(() => {
-    const el = ref.current;
-    if (!el) return;
+    const video = videoRef.current
+    if (!video || !USE_VIDEO_BACKGROUND) return
 
-    const obs = new IntersectionObserver(
-      ([e]) => {
-        if (e.isIntersecting) setInView(true);
-      },
-      { threshold }
-    );
+    video.muted = true
+    const playVideo = () => {
+      video.play().catch(() => {})
+    }
 
-    obs.observe(el);
+    playVideo()
+    video.addEventListener('loadeddata', playVideo)
 
-    return () => obs.disconnect();
-  }, [threshold]);
+    return () => video.removeEventListener('loadeddata', playVideo)
+  }, [])
 
-  return [ref, inView];
-}
+  useEffect(() => {
+    const ctx = gsap.context(() => {
+      const tl = gsap.timeline({ defaults: { ease: [0.22, 1, 0.36, 1] } })
 
-function VideoModal({ onClose }) {
+      tl.from('.hero-content', { opacity: 0, duration: 1.5 })
+        .from('.hero-badge', { opacity: 0, y: 16, duration: 0.55 }, 0.2)
+        .from(
+          '.hero-word',
+          { opacity: 0, y: 24, duration: 0.55, stagger: 0.08 },
+          0.35,
+        )
+        .from('.hero-sub', { opacity: 0, y: 20, duration: 0.6 }, 0.7)
+        .from('.hero-cta > *', { opacity: 0, y: 16, duration: 0.55, stagger: 0.1 }, 0.85)
+    }, sectionRef)
+
+    return () => ctx.revert()
+  }, [])
+
   return (
-    <div
-      onClick={onClose}
-      style={{
-        position: "fixed",
-        inset: 0,
-        zIndex: 100,
-        background: "rgba(0,0,0,0.75)",
-        backdropFilter: "blur(8px)",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        padding: "24px",
-        animation: "fadeIn 0.25s ease",
-      }}
+    <section
+      id="hero"
+      ref={sectionRef}
+      className="relative min-h-[100vh] overflow-hidden bg-black py-16 pt-28 lg:py-20 lg:pt-32"
     >
-      <div
-        onClick={(e) => e.stopPropagation()}
-        style={{
-          background: "rgba(20,40,30,0.95)",
-          borderRadius: "20px",
-          padding: "32px",
-          maxWidth: "520px",
-          width: "100%",
-          border: "1px solid rgba(255,255,255,0.15)",
-          animation: "slideUp 0.3s ease",
-          textAlign: "center",
-        }}
-      >
-        <h2 style={{ color: "#fff", marginBottom: "12px" }}>
-          Luminary in Action
-        </h2>
-
-        <p style={{ color: "rgba(255,255,255,0.7)", lineHeight: 1.6 }}>
-          See how our AI adapts to your learning style in real time.
-        </p>
-
-        <button
-          onClick={onClose}
-          style={{
-            marginTop: "20px",
-            padding: "10px 24px",
-            borderRadius: "999px",
-            border: "1px solid rgba(255,255,255,0.3)",
-            background: "rgba(255,255,255,0.1)",
-            color: "#fff",
-            cursor: "pointer",
-          }}
-        >
-          Close
-        </button>
+      <div className="pointer-events-none absolute inset-0 overflow-hidden">
+        {USE_VIDEO_BACKGROUND ? (
+          <video
+            ref={videoRef}
+            className="absolute inset-0 h-full w-full object-cover"
+            src={HERO_VIDEO_SRC}
+            autoPlay
+            loop
+            muted
+            playsInline
+            preload="auto"
+            aria-hidden="true"
+          />
+        ) : (
+          <div className="absolute inset-0 bg-black" />
+        )}
+        <div className="absolute inset-0 bg-black/40" />
       </div>
-    </div>
-  );
-}
 
-function CoursesPanel({ onClose }) {
-  return (
-    <div
-      onClick={onClose}
-      style={{
-        position: "fixed",
-        inset: 0,
-        zIndex: 100,
-        background: "rgba(0,0,0,0.7)",
-        backdropFilter: "blur(8px)",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        padding: "24px",
-      }}
-    >
-      <div
-        onClick={(e) => e.stopPropagation()}
-        style={{
-          background: "rgba(15,35,25,0.97)",
-          borderRadius: "20px",
-          padding: "32px",
-          maxWidth: "640px",
-          width: "100%",
-        }}
-      >
-        <h2 style={{ color: "#fff", marginBottom: "24px" }}>
-          Explore Courses
-        </h2>
+      <div className="hero-content relative z-20">
+        <div className="section-container max-w-7xl">
+          <div className="grid grid-cols-1 items-center gap-10">
+            <div className="space-y-6">
+              <div className="space-y-3">
+                <div className="hero-badge inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-1.5">
+                  <span className="size-2 rounded-full bg-brand-300" />
+                  <span className="text-xs uppercase tracking-[0.24em] text-white/70">
+                    Healthcare Innovation
+                  </span>
+                </div>
 
-        <div
-          style={{
-            display: "grid",
-            gridTemplateColumns: "1fr 1fr",
-            gap: "12px",
-          }}
-        >
-          {COURSES.map((course) => (
-            <div
-              key={course.title}
-              style={{
-                background: "rgba(255,255,255,0.06)",
-                borderRadius: "14px",
-                padding: "18px",
-                border: "1px solid rgba(255,255,255,0.1)",
-                color: "#fff",
-              }}
-            >
-              <div
-                style={{
-                  width: "8px",
-                  height: "8px",
-                  borderRadius: "50%",
-                  background: course.color,
-                  marginBottom: "10px",
-                }}
-              />
+                <h1 className="font-display max-w-3xl text-balance text-5xl font-bold leading-[0.95] text-white sm:text-6xl lg:text-[5.2rem]">
+                  <span className="inline-flex flex-wrap items-center gap-4">
+                    {headingWords.map((word, index) => (
+                      <span
+                        key={word.text + index}
+                        className={`hero-word inline-block ${word.className}`}
+                      >
+                        {word.text}
+                      </span>
+                    ))}
+                  </span>
+                </h1>
 
-              <div style={{ fontWeight: 600 }}>{course.title}</div>
+                <p className="hero-sub max-w-lg text-base leading-relaxed text-white/65 lg:text-lg">
+                  JV EdTech Medovation bridges compassion and technology — empowering
+                  professionals through AI-driven education, clinical informatics, and
+                  digital health innovation.
+                </p>
+              </div>
 
-              <div
-                style={{
-                  fontSize: "12px",
-                  color: "rgba(255,255,255,0.5)",
-                  marginTop: "4px",
-                }}
-              >
-                {course.level} · {course.duration}
+              <div className="hero-cta flex flex-col gap-3 sm:flex-row">
+                <Button href="/services" variant="light" className="px-8 py-4 text-base">
+                  Explore Medi AI
+                </Button>
+                <Button href="/about" variant="on-dark" className="px-8 py-4 text-base">
+                  Learn More
+                </Button>
               </div>
             </div>
-          ))}
-        </div>
-      </div>
-    </div>
-  );
-}
-
-function DashboardPanel({ onClose }) {
-  return (
-    <div
-      onClick={onClose}
-      style={{
-        position: "fixed",
-        inset: 0,
-        zIndex: 100,
-        background: "rgba(0,0,0,0.7)",
-        backdropFilter: "blur(8px)",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        padding: "24px",
-      }}
-    >
-      <div
-        onClick={(e) => e.stopPropagation()}
-        style={{
-          background: "rgba(15,35,25,0.97)",
-          borderRadius: "20px",
-          padding: "32px",
-          maxWidth: "520px",
-          width: "100%",
-        }}
-      >
-        <h2 style={{ color: "#fff", marginBottom: "16px" }}>
-          My Dashboard
-        </h2>
-
-        <div
-          style={{
-            background: "rgba(255,255,255,0.06)",
-            borderRadius: "14px",
-            padding: "18px",
-          }}
-        >
-          <div style={{ color: "#4ecdc4", fontSize: "28px" }}>68%</div>
-
-          <div style={{ color: "rgba(255,255,255,0.6)" }}>
-            Course Completion
           </div>
         </div>
       </div>
-    </div>
-  );
-}
-
-export default function LuminaryHero() {
-  const [mounted, setMounted] = useState(false);
-  const [modal, setModal] = useState(null);
-
-  const [headingRef, headingInView] = useInView(0.1);
-  const [subRef, subInView] = useInView(0.1);
-
-  useEffect(() => {
-    const t = setTimeout(() => setMounted(true), 100);
-    return () => clearTimeout(t);
-  }, []);
-
-  return (
-    <div
-      style={{
-        fontFamily: "'Helvetica Neue', Helvetica, sans-serif",
-        minHeight: "100vh",
-        position: "relative",
-        overflow: "hidden",
-      }}
-    >
-      {/* Animated Gradient */}
-      <div
-        style={{
-          position: "fixed",
-          inset: 0,
-          zIndex: 0,
-          background:
-            "linear-gradient(135deg, #a8e6cf, #88d8b0, #6bcfb8, #4ecdc4, #45b7d1, #96c93d)",
-          backgroundSize: "400% 400%",
-          animation: "gradientShift 8s ease infinite",
-        }}
-      />
-
-      {/* Floating blobs */}
-      <div
-        style={{
-          position: "fixed",
-          inset: 0,
-          zIndex: 1,
-          overflow: "hidden",
-          pointerEvents: "none",
-        }}
-      >
-        <div
-          style={{
-            position: "absolute",
-            width: "60vw",
-            height: "60vw",
-            borderRadius: "50%",
-            background:
-              "radial-gradient(circle, rgba(180,230,160,0.5) 0%, transparent 70%)",
-            top: "-20%",
-            left: "-10%",
-            animation: "blobFloat1 12s ease-in-out infinite",
-          }}
-        />
-
-        <div
-          style={{
-            position: "absolute",
-            width: "50vw",
-            height: "50vw",
-            borderRadius: "50%",
-            background:
-              "radial-gradient(circle, rgba(120,200,200,0.45) 0%, transparent 70%)",
-            bottom: "-10%",
-            right: "-5%",
-            animation: "blobFloat2 15s ease-in-out infinite",
-          }}
-        />
-
-        <div style={{
-          position: "absolute",
-          width: "35vw",
-          height: "35vw",
-          borderRadius: "50%",
-          background: "radial-gradient(circle, rgba(90,180,140,0.35) 0%, transparent 70%)",
-          top: "30%",
-          right: "20%",
-          animation: "blobFloat3 10s ease-in-out infinite"
-          }} 
-        />
-      </div>
-
-      {/* Content */}
-      <div
-        style={{
-          position: "relative",
-          zIndex: 10,
-          minHeight: "100vh",
-          display: "flex",
-          flexDirection: "column",
-        }}
-      >
-        {/* Hero */}
-        <div
-          style={{
-            flex: 1,
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-            justifyContent: "center",
-            textAlign: "center",
-            padding: "40px",
-          }}
-        >
-          <div
-            ref={headingRef}
-            style={{
-              overflow: "hidden",
-            }}
-          >
-            <h1
-              style={{
-                fontSize: "clamp(47px, 8vw, 90px)",
-                color: "#fff",
-                fontWeight: 300,
-                opacity: headingInView && mounted ? 1 : 0,
-                transform:
-                  headingInView && mounted
-                    ? "translateY(0)"
-                    : "translateY(60px)",
-                transition: "all 1.5s ease",
-              }}
-            >
-              Revolutionizing Healthcare Through Innovation and Excellence!
-            </h1>
-          </div>
-
-          <div ref={subRef} style={{ maxWidth: "560px" }}>
-            <p
-              style={{
-                color: "rgba(255,255,255,0.72)",
-                lineHeight: 1.7,
-                opacity: subInView && mounted ? 1 : 0,
-                transform:
-                  subInView && mounted
-                    ? "translateY(0)"
-                    : "translateY(30px)",
-                transition: "all 1.5s ease",
-              }}
-            >
-              Empowering Lives with Cutting-Edge Solutions in Education, Wellness, and Technology
-            </p>
-          </div>
-
-          <div style={{ height: 24 }} />
-        </div>
-      </div>
-
-      {/* Modals */}
-      {modal === "demo" && <VideoModal onClose={() => setModal(null)} />}
-      {modal === "courses" && <CoursesPanel onClose={() => setModal(null)} />}
-      {modal === "dashboard" && (
-        <DashboardPanel onClose={() => setModal(null)} />
-      )}
-
-      <style>{`
-        @keyframes gradientShift {
-          0% { background-position: 0% 50%; }
-          50% { background-position: 100% 50%; }
-          100% { background-position: 0% 50%; }
-        }
-
-        @keyframes blobFloat1 {
-          0%,100% { transform: translate(0,0) scale(1); }
-          50% { transform: translate(3%,5%) scale(1.05); }
-        }
-
-        @keyframes blobFloat2 {
-          0%,100% { transform: translate(0,0) scale(1); }
-          50% { transform: translate(-4%,-3%) scale(1.07); }
-        }
-
-        @keyframes blobFloat3 {
-          0% {
-            transform: translate(0px, 0px) scale(1);
-          }
-          33% {
-            transform: translate(-40px, 30px) scale(1.1);
-          }
-          66% {
-            transform: translate(30px, -20px) scale(0.95);
-          }
-          100% {
-            transform: translate(0px, 0px) scale(1);
-          }
-        }
-
-        @keyframes fadeIn {
-          from { opacity: 0; }
-          to { opacity: 1; }
-        }
-
-        @keyframes slideUp {
-          from {
-            opacity: 0;
-            transform: translateY(24px);
-          }
-
-          to {
-            opacity: 1;
-            transform: translateY(0);
-          }
-        }
-      `}</style>
-    </div>
-  );
+    </section>
+  )
 }
