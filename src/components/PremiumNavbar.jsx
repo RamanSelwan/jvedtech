@@ -1,21 +1,19 @@
 import { useState, useEffect } from 'react'
-import { useNavigate, useLocation } from 'react-router-dom'
-
 const NAV_LINKS = [
-  { label: 'Home', path: '/' },
-  { label: 'About', path: '/about' },
-  { label: 'Services', path: '/services' },
-  { label: 'Events', path: '/events' },
-  { label: 'Careers', path: '/careers' },
-  { label: 'Community', path: '/community' },
+  { label: 'Home', sectionId: 'home' },
+  { label: 'About', sectionId: 'about' },
+  { label: 'Services', sectionId: 'services' },
+  { label: 'Events', sectionId: 'events' },
+  { label: 'Careers', sectionId: 'careers' },
+  { label: 'Community', sectionId: 'community' },
 ]
+
+const SECTION_IDS = NAV_LINKS.map((link) => link.sectionId)
 
 export default function PremiumNavbar() {
   const [isScrolled, setIsScrolled] = useState(false)
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
   const [activeSection, setActiveSection] = useState('home')
-  const navigate = useNavigate()
-  const location = useLocation()
 
   useEffect(() => {
     const scrollHandler = () => setIsScrolled(window.scrollY > 50)
@@ -25,21 +23,37 @@ export default function PremiumNavbar() {
   }, [])
 
   useEffect(() => {
-    const pathToSection = {
-      '/': 'home',
-      '/about': 'about',
-      '/services': 'services',
-      '/events': 'events',
-      '/careers': 'careers',
-      '/community': 'community',
-    }
-    setActiveSection(pathToSection[location.pathname] || 'home')
-  }, [location.pathname])
+    const sections = SECTION_IDS.map((id) => document.getElementById(id)).filter(Boolean)
+    if (!sections.length) return undefined
 
-  const handleNavClick = (e, path) => {
-    e.preventDefault()
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const visible = entries
+          .filter((e) => e.isIntersecting)
+          .sort((a, b) => b.intersectionRatio - a.intersectionRatio)
+
+        if (visible[0]?.target.id) {
+          setActiveSection(visible[0].target.id)
+        }
+      },
+      { rootMargin: '-80px 0px -55% 0px', threshold: [0, 0.15, 0.35, 0.55] },
+    )
+
+    sections.forEach((section) => observer.observe(section))
+    return () => observer.disconnect()
+  }, [])
+
+  useEffect(() => {
+    const onHashChange = () => {
+      const sectionId = window.location.hash.replace('#', '') || 'home'
+      setActiveSection(sectionId)
+    }
+    window.addEventListener('hashchange', onHashChange)
+    return () => window.removeEventListener('hashchange', onHashChange)
+  }, [])
+
+  const handleNavClick = () => {
     setIsMobileMenuOpen(false)
-    navigate(path)
   }
 
   return (
@@ -72,8 +86,8 @@ export default function PremiumNavbar() {
           }}
         >
           <a
-            href="/"
-            onClick={(e) => handleNavClick(e, '/')}
+            href="#home"
+            onClick={handleNavClick}
             style={{
               fontSize: '18px',
               fontWeight: 700,
@@ -112,12 +126,12 @@ export default function PremiumNavbar() {
 
           <div className="hidden md:flex items-center gap-8">
             {NAV_LINKS.map((link) => {
-              const isActive = activeSection === (link.path === '/' ? 'home' : link.path.replace('/', ''))
+              const isActive = activeSection === link.sectionId
               return (
                 <a
                   key={link.label}
-                  href={link.path}
-                  onClick={(e) => handleNavClick(e, link.path)}
+                  href={`#${link.sectionId}`}
+                  onClick={handleNavClick}
                   style={{
                     color: isActive ? '#4ecdc4' : 'rgba(255,255,255,0.7)',
                     textDecoration: 'none',
@@ -161,12 +175,12 @@ export default function PremiumNavbar() {
       {isMobileMenuOpen && (
         <div className="fixed top-[76px] left-0 right-0 z-50 bg-[#0f2319de] backdrop-blur-xl border-b border-brand-600/20 p-4 md:hidden">
           {NAV_LINKS.map((link) => {
-            const isActive = activeSection === (link.path === '/' ? 'home' : link.path.replace('/', ''))
+            const isActive = activeSection === link.sectionId
             return (
               <a
                 key={link.label}
-                href={link.path}
-                onClick={(e) => handleNavClick(e, link.path)}
+                href={`#${link.sectionId}`}
+                onClick={handleNavClick}
                 className={`block rounded-2xl px-4 py-3 text-sm font-medium transition ${
                   isActive ? 'bg-brand-500/15 text-brand-200' : 'text-white/80 hover:bg-white/10'
                 }`}

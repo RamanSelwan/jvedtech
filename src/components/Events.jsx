@@ -251,7 +251,7 @@ export default function Events() {
   const filteredEvents = filter === 'all' ? events : events.filter((item) => item.status === filter)
 
   return (
-    <section className="relative overflow-hidden py-28 sm:py-32">
+    <section id="events" className="relative overflow-hidden py-28 sm:py-32">
       <div className="pointer-events-none absolute inset-0 mesh-gradient opacity-30" />
       <div className="section-container relative">
         <div className="mb-16">

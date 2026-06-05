@@ -1,0 +1,21 @@
+export function scrollToSection(sectionId) {
+  const navOffset = 80
+
+  if (sectionId === 'home') {
+    window.scrollTo({ top: 0, behavior: 'smooth' })
+    window.history.replaceState(null, '', '/')
+    return
+  }
+
+  const el = document.getElementById(sectionId)
+  if (!el) return
+
+  const top = el.getBoundingClientRect().top + window.scrollY - navOffset
+  window.scrollTo({ top, behavior: 'smooth' })
+  window.history.replaceState(null, '', `#${sectionId}`)
+}
+
+export function getSectionIdFromHash() {
+  const hash = window.location.hash.replace('#', '')
+  return hash || 'home'
+}

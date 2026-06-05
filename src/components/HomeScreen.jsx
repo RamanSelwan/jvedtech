@@ -110,10 +110,10 @@ export default function HomeScreen() {
               </div>
 
               <div className="hero-cta flex flex-col gap-3 sm:flex-row">
-                <Button href="/services" variant="light" className="px-8 py-4 text-base">
+                <Button href="#services" variant="light" className="px-8 py-4 text-base">
                   Explore Medi AI
                 </Button>
-                <Button href="/about" variant="on-dark" className="px-8 py-4 text-base">
+                <Button href="#about" variant="on-dark" className="px-8 py-4 text-base">
                   Learn More
                 </Button>
               </div>

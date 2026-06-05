@@ -15,6 +15,7 @@ export default function Button({
   variant = 'primary',
   className = '',
   type = 'button',
+  onClick,
   ...props
 }) {
   const base =
@@ -24,7 +25,7 @@ export default function Button({
 
   if (href) {
     return (
-      <a href={href} className={classes} {...props}>
+      <a href={href} className={classes} onClick={onClick} {...props}>
         {children}
       </a>
     )
