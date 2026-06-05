@@ -34,6 +34,15 @@
     scroll-behavior: smooth;
   }
 
+  #home,
+  #about,
+  #services,
+  #events,
+  #careers,
+  #community {
+    scroll-margin-top: 96px;
+  }
+
   body {
     @apply text-white antialiased;
     min-height: 100vh;

@@ -1,5 +1,5 @@
 export function scrollToSection(sectionId) {
-  const navOffset = 80
+  const navOffset = 96
 
   if (sectionId === 'home') {
     window.scrollTo({ top: 0, behavior: 'smooth' })
@@ -13,9 +13,4 @@ export function scrollToSection(sectionId) {
   const top = el.getBoundingClientRect().top + window.scrollY - navOffset
   window.scrollTo({ top, behavior: 'smooth' })
   window.history.replaceState(null, '', `#${sectionId}`)
-}
-
-export function getSectionIdFromHash() {
-  const hash = window.location.hash.replace('#', '')
-  return hash || 'home'
 }

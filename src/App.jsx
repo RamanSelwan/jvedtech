@@ -4,7 +4,7 @@ import IntegratedPage from './components/IntegratedPage'
 import PremiumNavbar from './components/PremiumNavbar'
 import Footer from './components/Footer'
 import useScrollReveal from './hooks/useScrollReveal'
-import { getSectionIdFromHash, scrollToSection } from './utils/scrollToSection'
+import { scrollToSection } from './utils/scrollToSection'
 
 export default function App() {
   const [loading, setLoading] = useState(true)
@@ -14,10 +14,8 @@ export default function App() {
   useEffect(() => {
     if (loading) return
 
-    const sectionId = getSectionIdFromHash()
-    if (sectionId !== 'home') {
-      requestAnimationFrame(() => scrollToSection(sectionId))
-    }
+    window.scrollTo({ top: 0, behavior: 'auto' })
+    window.history.replaceState(null, '', window.location.pathname)
   }, [loading])
 
   useEffect(() => {

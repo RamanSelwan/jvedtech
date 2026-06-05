@@ -1,4 +1,5 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
+
 const NAV_LINKS = [
   { label: 'Home', sectionId: 'home' },
   { label: 'About', sectionId: 'about' },
@@ -9,51 +10,46 @@ const NAV_LINKS = [
 ]
 
 const SECTION_IDS = NAV_LINKS.map((link) => link.sectionId)
+const NAV_OFFSET = 96
 
 export default function PremiumNavbar() {
   const [isScrolled, setIsScrolled] = useState(false)
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
   const [activeSection, setActiveSection] = useState('home')
 
-  useEffect(() => {
-    const scrollHandler = () => setIsScrolled(window.scrollY > 50)
-    scrollHandler()
-    window.addEventListener('scroll', scrollHandler)
-    return () => window.removeEventListener('scroll', scrollHandler)
-  }, [])
+  const updateActiveSection = useCallback(() => {
+    const scrollPos = window.scrollY + NAV_OFFSET
 
-  useEffect(() => {
-    const sections = SECTION_IDS.map((id) => document.getElementById(id)).filter(Boolean)
-    if (!sections.length) return undefined
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        const visible = entries
-          .filter((e) => e.isIntersecting)
-          .sort((a, b) => b.intersectionRatio - a.intersectionRatio)
-
-        if (visible[0]?.target.id) {
-          setActiveSection(visible[0].target.id)
-        }
-      },
-      { rootMargin: '-80px 0px -55% 0px', threshold: [0, 0.15, 0.35, 0.55] },
-    )
-
-    sections.forEach((section) => observer.observe(section))
-    return () => observer.disconnect()
-  }, [])
-
-  useEffect(() => {
-    const onHashChange = () => {
-      const sectionId = window.location.hash.replace('#', '') || 'home'
-      setActiveSection(sectionId)
+    let current = 'home'
+    for (const id of SECTION_IDS) {
+      const el = document.getElementById(id)
+      if (!el) continue
+      if (el.offsetTop <= scrollPos) {
+        current = id
+      }
     }
-    window.addEventListener('hashchange', onHashChange)
-    return () => window.removeEventListener('hashchange', onHashChange)
+
+    setActiveSection(current)
   }, [])
 
-  const handleNavClick = () => {
+  useEffect(() => {
+    const scrollHandler = () => {
+      setIsScrolled(window.scrollY > 50)
+      updateActiveSection()
+    }
+
+    scrollHandler()
+    window.addEventListener('scroll', scrollHandler, { passive: true })
+    return () => window.removeEventListener('scroll', scrollHandler)
+  }, [updateActiveSection])
+
+  useEffect(() => {
+    updateActiveSection()
+  }, [updateActiveSection])
+
+  const handleNavClick = (sectionId) => {
     setIsMobileMenuOpen(false)
+    setActiveSection(sectionId)
   }
 
   return (
@@ -87,7 +83,7 @@ export default function PremiumNavbar() {
         >
           <a
             href="#home"
-            onClick={handleNavClick}
+            onClick={() => handleNavClick('home')}
             style={{
               fontSize: '18px',
               fontWeight: 700,
@@ -131,7 +127,7 @@ export default function PremiumNavbar() {
                 <a
                   key={link.label}
                   href={`#${link.sectionId}`}
-                  onClick={handleNavClick}
+                  onClick={() => handleNavClick(link.sectionId)}
                   style={{
                     color: isActive ? '#4ecdc4' : 'rgba(255,255,255,0.7)',
                     textDecoration: 'none',
@@ -180,7 +176,7 @@ export default function PremiumNavbar() {
               <a
                 key={link.label}
                 href={`#${link.sectionId}`}
-                onClick={handleNavClick}
+                onClick={() => handleNavClick(link.sectionId)}
                 className={`block rounded-2xl px-4 py-3 text-sm font-medium transition ${
                   isActive ? 'bg-brand-500/15 text-brand-200' : 'text-white/80 hover:bg-white/10'
                 }`}
