@@ -134,7 +134,7 @@ function JobCard({ job, index }) {
 
 export default function Careers() {
   return (
-    <section className="relative overflow-hidden py-28 sm:py-32">
+    <section id="careers" className="relative overflow-hidden py-28 sm:py-32">
       <div className="pointer-events-none absolute inset-0 mesh-gradient opacity-30" />
       <div className="section-container relative">
         {/* Hero Section */}

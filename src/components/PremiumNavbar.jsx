@@ -1,45 +1,55 @@
-import { useState, useEffect } from 'react'
-import { useNavigate, useLocation } from 'react-router-dom'
+import { useState, useEffect, useCallback } from 'react'
 
 const NAV_LINKS = [
-  { label: 'Home', path: '/' },
-  { label: 'About', path: '/about' },
-  { label: 'Services', path: '/services' },
-  { label: 'Events', path: '/events' },
-  { label: 'Careers', path: '/careers' },
-  { label: 'Community', path: '/community' },
+  { label: 'Home', sectionId: 'home' },
+  { label: 'About', sectionId: 'about' },
+  { label: 'Services', sectionId: 'services' },
+  { label: 'Events', sectionId: 'events' },
+  { label: 'Careers', sectionId: 'careers' },
+  { label: 'Community', sectionId: 'community' },
 ]
+
+const SECTION_IDS = NAV_LINKS.map((link) => link.sectionId)
+const NAV_OFFSET = 96
 
 export default function PremiumNavbar() {
   const [isScrolled, setIsScrolled] = useState(false)
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
   const [activeSection, setActiveSection] = useState('home')
-  const navigate = useNavigate()
-  const location = useLocation()
 
-  useEffect(() => {
-    const scrollHandler = () => setIsScrolled(window.scrollY > 50)
-    scrollHandler()
-    window.addEventListener('scroll', scrollHandler)
-    return () => window.removeEventListener('scroll', scrollHandler)
+  const updateActiveSection = useCallback(() => {
+    const scrollPos = window.scrollY + NAV_OFFSET
+
+    let current = 'home'
+    for (const id of SECTION_IDS) {
+      const el = document.getElementById(id)
+      if (!el) continue
+      if (el.offsetTop <= scrollPos) {
+        current = id
+      }
+    }
+
+    setActiveSection(current)
   }, [])
 
   useEffect(() => {
-    const pathToSection = {
-      '/': 'home',
-      '/about': 'about',
-      '/services': 'services',
-      '/events': 'events',
-      '/careers': 'careers',
-      '/community': 'community',
+    const scrollHandler = () => {
+      setIsScrolled(window.scrollY > 50)
+      updateActiveSection()
     }
-    setActiveSection(pathToSection[location.pathname] || 'home')
-  }, [location.pathname])
 
-  const handleNavClick = (e, path) => {
-    e.preventDefault()
+    scrollHandler()
+    window.addEventListener('scroll', scrollHandler, { passive: true })
+    return () => window.removeEventListener('scroll', scrollHandler)
+  }, [updateActiveSection])
+
+  useEffect(() => {
+    updateActiveSection()
+  }, [updateActiveSection])
+
+  const handleNavClick = (sectionId) => {
     setIsMobileMenuOpen(false)
-    navigate(path)
+    setActiveSection(sectionId)
   }
 
   return (
@@ -72,8 +82,8 @@ export default function PremiumNavbar() {
           }}
         >
           <a
-            href="/"
-            onClick={(e) => handleNavClick(e, '/')}
+            href="#home"
+            onClick={() => handleNavClick('home')}
             style={{
               fontSize: '18px',
               fontWeight: 700,
@@ -112,12 +122,12 @@ export default function PremiumNavbar() {
 
           <div className="hidden md:flex items-center gap-8">
             {NAV_LINKS.map((link) => {
-              const isActive = activeSection === (link.path === '/' ? 'home' : link.path.replace('/', ''))
+              const isActive = activeSection === link.sectionId
               return (
                 <a
                   key={link.label}
-                  href={link.path}
-                  onClick={(e) => handleNavClick(e, link.path)}
+                  href={`#${link.sectionId}`}
+                  onClick={() => handleNavClick(link.sectionId)}
                   style={{
                     color: isActive ? '#4ecdc4' : 'rgba(255,255,255,0.7)',
                     textDecoration: 'none',
@@ -161,12 +171,12 @@ export default function PremiumNavbar() {
       {isMobileMenuOpen && (
         <div className="fixed top-[76px] left-0 right-0 z-50 bg-[#0f2319de] backdrop-blur-xl border-b border-brand-600/20 p-4 md:hidden">
           {NAV_LINKS.map((link) => {
-            const isActive = activeSection === (link.path === '/' ? 'home' : link.path.replace('/', ''))
+            const isActive = activeSection === link.sectionId
             return (
               <a
                 key={link.label}
-                href={link.path}
-                onClick={(e) => handleNavClick(e, link.path)}
+                href={`#${link.sectionId}`}
+                onClick={() => handleNavClick(link.sectionId)}
                 className={`block rounded-2xl px-4 py-3 text-sm font-medium transition ${
                   isActive ? 'bg-brand-500/15 text-brand-200' : 'text-white/80 hover:bg-white/10'
                 }`}

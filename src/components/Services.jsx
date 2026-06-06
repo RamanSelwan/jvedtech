@@ -92,7 +92,7 @@ const SERVICES = [
 
 export default function Services() {
   return (
-    <section className="section-padding relative overflow-hidden">
+    <section id="services" className="section-padding relative overflow-hidden">
       <div className="pointer-events-none absolute inset-0 mesh-gradient opacity-30" />
       <div className="section-container relative">
         <div className="mb-12 max-w-3xl">

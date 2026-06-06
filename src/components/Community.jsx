@@ -54,7 +54,7 @@ export default function Community() {
   const [ref, inView] = useInView()
 
   return (
-    <section className="bg-gradient-to-b from-brand-900 to-brand-800 py-20 sm:py-28 relative overflow-hidden">
+    <section id="community" className="bg-gradient-to-b from-brand-900 to-brand-800 py-20 sm:py-28 relative overflow-hidden">
       {/* Decorative elements */}
       <div className="absolute inset-0 pointer-events-none">
         <div className="absolute top-1/4 right-0 w-96 h-96 bg-brand-600/10 rounded-full blur-3xl" />
