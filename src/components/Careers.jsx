@@ -144,11 +144,22 @@ export default function Careers() {
               We're Hiring
             </span>
             <h1 className="text-4xl sm:text-5xl font-light font-display text-white mb-4 leading-tight">
-              Shape the Future of <span className="text-brand-300">Healthcare Education</span>
+              Do what you <span className="text-brand-300">LOVE</span>
             </h1>
-            <p className="text-white/70 leading-relaxed mb-6 text-lg">
-              At JVEDTECH Medovation, we advance healthcare standards through tailored education and cutting-edge solutions. Join a team where learning, growth, and impact converge.
-            </p>
+            <h2 className="text-xl sm:text-2xl font-light font-display text-white/90 mb-6">
+              Inviting you to build a great future with us
+            </h2>
+            <div className="text-white/70 leading-relaxed mb-8 space-y-4 text-lg">
+              <p>
+                People! An essential part of any successful business, drive the Organization in the right direction. With our accelerated business expansion, we are always on the lookout for a talented pool of resources to grow with our organization.
+              </p>
+              <p>
+                We look at talent with a long-term plan where they can be groomed for different roles. People with the right attitude and great aspirations. At JVEDTECH Medovation, we have an exciting work atmosphere with exceptional growth opportunities.
+              </p>
+              <p className="text-brand-200 font-medium">
+                Please send your resumes to info@jvedtech.com
+              </p>
+            </div>
 
             <div className="flex gap-3 flex-wrap">
               <button className="px-6 py-2 bg-brand-500 text-white rounded-lg font-medium transition-all duration-300 hover:bg-brand-600">
