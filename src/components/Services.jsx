@@ -94,7 +94,7 @@ const SERVICES = [
 
 export default function Services() {
   return (
-    <section id="services" className="section-padding relative overflow-hidden bg-surface-elevated">
+    <section id="services" className="section-padding relative overflow-hidden bg-gradient-to-br from-green-50 via-cyan-50 to-emerald-100">
       <div className="pointer-events-none absolute inset-0 mesh-gradient opacity-40" />
       <div className="section-container relative">
         <div className="mb-14 max-w-3xl">
@@ -104,7 +104,7 @@ export default function Services() {
             description="We deliver exceptional services in education, patient care, digital advertising, and medical innovation to empower growth, accessibility, and transformation."
           />
           <Reveal delay={0.1}>
-            <p className="mt-6 text-base leading-relaxed text-foreground-muted">
+            <p className="mt-6 text-base leading-relaxed text-emerald-900-muted">
               JVEDTECH Medovation is at the forefront of the healthcare sector, delivering exceptional services in education, patient care, digital advertising, and medical product import-export. We empower growth and transformation for healthcare organizations, professionals, and patients.
             </p>
           </Reveal>
@@ -118,7 +118,7 @@ export default function Services() {
                 <motion.article
                   whileHover={{ y: -6 }}
                   transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
-                  className="group relative flex h-full flex-col overflow-hidden rounded-2xl border border-brand-100/80 bg-white p-7 shadow-sm transition-shadow duration-300 hover:border-brand-200 hover:shadow-xl hover:shadow-brand-200/30"
+                  className="group relative flex h-full flex-col overflow-hidden rounded-2xl border border-green-200 bg-gradient-to-br from-white via-green-50 to-cyan-50 p-7 shadow-sm transition-shadow duration-300 hover:border-green-300 hover:shadow-xl hover:shadow-green-200/40"
                 >
                   <div className="card-shine pointer-events-none absolute inset-0 opacity-0 transition group-hover:opacity-100" />
 
@@ -127,16 +127,16 @@ export default function Services() {
                       <Icon />
                     </AnimatedIconBox>
 
-                    <h3 className="mt-5 text-xl font-semibold text-foreground">{service.title}</h3>
+                    <h3 className="mt-5 text-xl font-semibold text-emerald-900">{service.title}</h3>
 
-                    <p className="mt-3 text-sm leading-relaxed text-foreground-muted">
+                    <p className="mt-3 text-sm leading-relaxed text-emerald-900-muted">
                       {service.description}
                     </p>
 
-                    <ul className="mt-5 flex-1 space-y-3 text-sm text-foreground-muted">
+                    <ul className="mt-5 flex-1 space-y-3 text-sm text-emerald-900-muted">
                       {service.highlights.map((item) => (
                         <li key={item} className="flex items-start gap-3">
-                          <span className="mt-1.5 inline-flex h-1.5 w-1.5 shrink-0 rounded-full bg-gradient-to-r from-brand-400 to-green-400" />
+                          <span className="mt-1.5 inline-flex h-1.5 w-1.5 shrink-0 rounded-full bg-gradient-to-r from-emerald-500 to-cyan-500" />
                           <span>{item}</span>
                         </li>
                       ))}

@@ -54,7 +54,7 @@ const HIGHLIGHTS = [
 
 export default function About() {
   return (
-    <section id="about" className="section-padding relative overflow-hidden bg-white">
+    <section id="about" className="section-padding relative overflow-hidden bg-gradient-to-br from-green-50 via-cyan-50 to-emerald-100">
       <div className="pointer-events-none absolute inset-0 mesh-gradient opacity-50" />
       <div className="section-container relative">
         <div className="grid gap-16 lg:grid-cols-2 lg:items-start lg:gap-20">
@@ -89,9 +89,9 @@ export default function About() {
                     key={label}
                     whileHover={{ y: -4 }}
                     transition={{ duration: 0.25 }}
-                    className="card-premium rounded-2xl p-5"
+                    className="card-premium rounded-2xl p-5 bg-gradient-to-br from-green-50 via-emerald-50 to-cyan-50 border border-green-100"
                   >
-                    <span className="text-xs font-semibold uppercase tracking-[0.2em] text-brand-600">
+                    <span className="text-xs font-semibold uppercase tracking-[0.2em] text-emerald-600">
                       {label}
                     </span>
                     <p className="mt-3 text-sm leading-relaxed text-foreground-muted">{texts[i]}</p>
@@ -116,7 +116,7 @@ export default function About() {
                 <motion.article
                   whileHover={{ x: 4 }}
                   transition={{ duration: 0.25 }}
-                  className="group relative overflow-hidden rounded-2xl border border-brand-100 bg-gradient-to-br from-white to-brand-50/50 p-7 shadow-sm transition-shadow duration-300 hover:shadow-lg hover:shadow-brand-200/40"
+                  className="card-premium rounded-2xl p-5 bg-gradient-to-br from-green-50 via-cyan-50 to-emerald-100"
                 >
                   <div className="card-shine pointer-events-none absolute inset-0 opacity-0 transition group-hover:opacity-100" />
                   <div className="relative flex items-start justify-between gap-4">
@@ -155,9 +155,9 @@ export default function About() {
                 <motion.article
                   whileHover={{ y: -6 }}
                   transition={{ duration: 0.3 }}
-                  className="card-premium group p-6"
+                  className="card-premium group p-6 bg-gradient-to-br from-cyan-50 via-green-50 to-emerald-100"
                 >
-                  <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br from-brand-100 to-green-100 text-sm font-bold text-brand-600">
+                  <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br from-brand-100 to-green-100 text-sm font-bold text-emerald-600">
                     {member.name.split(' ').slice(-1)[0][0]}
                   </div>
                   <h3 className="text-lg font-semibold text-foreground">{member.name}</h3>
@@ -166,7 +166,7 @@ export default function About() {
                     href={member.href}
                     target="_blank"
                     rel="noreferrer"
-                    className="mt-5 inline-flex items-center gap-2 text-sm font-medium text-brand-600 transition hover:text-brand-500"
+                    className="mt-5 inline-flex items-center gap-2 text-sm font-medium text-emerald-600 transition hover:text-brand-500"
                   >
                     View LinkedIn
                     <span className="transition-transform group-hover:translate-x-1" aria-hidden="true">

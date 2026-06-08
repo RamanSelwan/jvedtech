@@ -15,8 +15,8 @@ function EventCard({ event, delay, onRegister }) {
 
   const statusStyles = {
     upcoming: 'bg-brand-50 text-brand-700 border-brand-200',
-    live: 'bg-green-50 text-green-700 border-green-200 animate-pulse',
-    past: 'bg-surface-muted text-muted border-brand-100',
+    live: 'bg-green-50 text-sky-800 border-green-200 animate-pulse',
+    past: 'bg-surface-muted text-muted border-sky-200',
   }
 
   return (
@@ -27,7 +27,7 @@ function EventCard({ event, delay, onRegister }) {
         className="group h-full"
       >
         <div className="card-premium flex h-full flex-col overflow-hidden rounded-2xl">
-          <div className="relative border-b border-brand-100 p-6">
+          <div className="relative border-b border-sky-200 p-6">
             <div className="absolute top-4 right-4 flex h-16 w-16 flex-col items-center justify-center rounded-2xl bg-gradient-to-br from-brand-100 to-green-100">
               <div className="text-[10px] font-semibold uppercase text-brand-500">{month}</div>
               <div className="font-display text-2xl font-bold text-foreground">{day}</div>
@@ -39,7 +39,7 @@ function EventCard({ event, delay, onRegister }) {
               >
                 {event.status === 'upcoming' ? 'Upcoming' : event.status === 'live' ? 'LIVE' : 'Past'}
               </span>
-              <span className="inline-block rounded-full border border-brand-100 bg-surface-elevated px-3 py-1 text-xs font-semibold uppercase tracking-wider text-foreground-muted">
+              <span className="inline-block rounded-full border border-sky-200 bg-surface-elevated px-3 py-1 text-xs font-semibold uppercase tracking-wider text-foreground-muted">
                 {event.time.split('–')[0].trim()}
               </span>
             </div>
@@ -52,7 +52,7 @@ function EventCard({ event, delay, onRegister }) {
               {event.description}
             </p>
 
-            <div className="mb-6 space-y-3 border-t border-brand-100 pt-4">
+            <div className="mb-6 space-y-3 border-t border-sky-200 pt-4">
               <div className="flex items-center gap-2 text-sm">
                 <svg className="h-4 w-4 text-brand-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
@@ -127,7 +127,7 @@ function RegistrationModal({ event, onClose, onSubmit }) {
         animate={{ opacity: 1, scale: 1, y: 0 }}
         exit={{ opacity: 0, scale: 0.95, y: 20 }}
         transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
-        className="w-full max-w-2xl rounded-3xl border border-brand-100 bg-white p-8 shadow-2xl shadow-brand-900/10"
+        className="w-full max-w-2xl rounded-3xl border border-sky-200 bg-gradient-to-br from-white via-sky-50 to-blue-50 border border-sky-200 p-8 shadow-2xl shadow-brand-900/10"
       >
         <div className="mb-6 flex items-start justify-between gap-4">
           <div>
@@ -236,7 +236,7 @@ export default function Events() {
   const filteredEvents = filter === 'all' ? events : events.filter((item) => item.status === filter)
 
   return (
-    <section id="events" className="section-padding relative overflow-hidden bg-white">
+    <section id="events" className="section-padding relative overflow-hidden bg-gradient-to-br from-sky-50 via-cyan-50 to-blue-100">
       <div className="pointer-events-none absolute inset-0 mesh-gradient opacity-30" />
       <div className="section-container relative">
         <SectionHeader
@@ -255,7 +255,7 @@ export default function Events() {
                 className={`rounded-full px-5 py-2.5 text-sm font-medium transition-all duration-300 ${
                   filter === option
                     ? 'btn-gradient text-foreground shadow-md shadow-brand-300/20'
-                    : 'border border-brand-200 bg-white text-foreground-muted hover:border-brand-300 hover:bg-brand-50'
+                    : 'border border-brand-200 bg-gradient-to-br from-white via-sky-50 to-blue-50 border border-sky-200 text-foreground-muted hover:border-brand-300 hover:bg-brand-50'
                 }`}
               >
                 {option === 'all' ? 'All Events' : option === 'upcoming' ? 'Upcoming' : 'Past Events'}

@@ -10,7 +10,7 @@ function ValueCard({ value, delay }) {
   return (
     <Reveal delay={delay}>
       <motion.div whileHover={{ y: -4 }} transition={{ duration: 0.25 }} className="h-full">
-        <div className="card-premium h-full rounded-2xl p-8">
+        <div className="h-full rounded-2xl border border-emerald-200 bg-white p-8 shadow-sm hover:shadow-lg hover:shadow-emerald-200/30 transition-all duration-300">
           <div className="mb-4 text-3xl">{value.icon}</div>
           <h3 className="mb-2 font-display text-lg font-semibold text-foreground">{value.title}</h3>
           <p className="text-sm leading-relaxed text-foreground-muted">{value.description}</p>
@@ -37,7 +37,7 @@ function JobCard({ job, index }) {
     <Reveal delay={index * 0.08}>
       <motion.div
         layout
-        className="card-premium overflow-hidden rounded-2xl"
+        className="overflow-hidden rounded-2xl border border-emerald-200 bg-white shadow-sm hover:shadow-lg hover:shadow-emerald-200/40 transition-all duration-300"
       >
         <button
           type="button"
@@ -72,7 +72,7 @@ function JobCard({ job, index }) {
           transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
           className="overflow-hidden"
         >
-          <div className="border-t border-brand-100 bg-surface-elevated/50 px-6 py-5">
+          <div className="border-t border-emerald-200 bg-surface-elevated/50 px-6 py-5">
             <p className="mb-3 text-xs font-semibold uppercase tracking-widest text-brand-600">
               Key Skills Required
             </p>
@@ -105,7 +105,7 @@ function JobCard({ job, index }) {
 export default function Careers() {
   return (
     <section id="careers" className="relative overflow-hidden">
-      <div className="section-padding relative bg-surface-elevated">
+      <div className="section-padding relative bg-gradient-to-br from-cyan-50 via-green-50 to-cyan-100">
         <div className="pointer-events-none absolute inset-0 mesh-gradient opacity-30" />
         <div className="section-container relative">
           <Reveal>
@@ -140,7 +140,7 @@ export default function Careers() {
         </div>
       </div>
 
-      <div className="section-padding border-y border-brand-100 bg-white">
+      <div className="section-padding border-y border-emerald-200 bg-gradient-to-br from-emerald-100 via-emerald-50 to-cyan-100">
         <div className="section-container">
           <SectionHeader
             label="Why JVedtech"
@@ -166,7 +166,7 @@ export default function Careers() {
         </div>
       </div>
 
-      <div id="open-positions" className="section-padding bg-surface-elevated">
+      <div id="open-positions" className="section-padding bg-gradient-to-br from-cyan-50 via-green-50 to-cyan-100">
         <div className="section-container">
           <SectionHeader
             label="Open Positions"
@@ -182,7 +182,7 @@ export default function Careers() {
         </div>
       </div>
 
-      <div className="section-padding bg-white">
+      <div className="section-padding bg-gradient-to-br from-emerald-100 via-emerald-50 to-cyan-100">
         <div className="section-container">
           <div className="grid gap-12 lg:grid-cols-2 lg:gap-16">
             <Reveal>
@@ -224,7 +224,7 @@ export default function Careers() {
             </Reveal>
 
             <Reveal delay={0.15}>
-              <div id="apply-form" className="card-premium rounded-3xl p-8">
+              <div id="apply-form" className="rounded-3xl border border-emerald-200 bg-white p-8 shadow-sm">
                 <h3 className="mb-2 text-xl font-semibold text-foreground">Submit Your Application</h3>
                 <p className="mb-6 text-sm text-foreground-muted">
                   Complete the form and our team will be in touch shortly.
