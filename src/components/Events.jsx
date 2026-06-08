@@ -1,106 +1,85 @@
-﻿import { useRef, useEffect, useState } from 'react'
+﻿import { useEffect, useState } from 'react'
+import { motion, AnimatePresence } from 'framer-motion'
 import { EVENTS } from '../data/content'
+import SectionHeader from './ui/SectionHeader'
+import Reveal from './ui/Reveal'
+import Button from './ui/Button'
+import Input from './ui/Input'
 
 const SAMPLE_EVENTS = EVENTS || []
 
-function useInView(threshold = 0.2) {
-  const ref = useRef(null)
-  const [inView, setInView] = useState(false)
-
-  useEffect(() => {
-    const element = ref.current
-    if (!element) return
-
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setInView(true)
-          observer.disconnect()
-        }
-      },
-      { threshold }
-    )
-
-    observer.observe(element)
-    return () => observer.disconnect()
-  }, [threshold])
-
-  return [ref, inView]
-}
-
 function EventCard({ event, delay, onRegister }) {
-  const [ref, inView] = useInView()
   const eventDate = new Date(event.date)
   const day = eventDate.getDate()
   const month = eventDate.toLocaleString('en-US', { month: 'short' }).toUpperCase()
 
   const statusStyles = {
-    upcoming: 'bg-brand-50 text-brand-600 border-brand-200',
-    live: 'bg-amber-50 text-amber-700 border-amber-200 animate-pulse',
-    past: 'bg-gray-100 text-gray-600 border-gray-200',
+    upcoming: 'bg-brand-50 text-brand-700 border-brand-200',
+    live: 'bg-green-50 text-green-700 border-green-200 animate-pulse',
+    past: 'bg-surface-muted text-muted border-brand-100',
   }
 
   return (
-    <div
-      ref={ref}
-      className="group"
-      style={{ animation: inView ? `fadeUp 0.6s ease-out ${delay}s both` : 'none' }}
-    >
-      <style>{`
-        @keyframes fadeUp {
-          from { opacity: 0; transform: translateY(24px); }
-          to { opacity: 1; transform: translateY(0); }
-        }
-      `}</style>
-
-      <div className="glass rounded-3xl overflow-hidden transition-all duration-300 hover:shadow-xl hover:shadow-brand-400/20 h-full">
-        <div className="relative p-6 border-b border-brand-600/10">
-          <div className="absolute top-4 right-4 w-16 h-16 bg-gradient-to-br from-brand-100 to-brand-50 rounded-3xl flex flex-col items-center justify-center">
-            <div className="text-xs font-semibold text-brand-400 uppercase">{month}</div>
-            <div className="text-2xl font-bold text-brand-700">{day}</div>
-          </div>
-
-          <div className="flex gap-2 mb-3 pr-20 flex-wrap">
-            <span className={`inline-block px-3 py-1 text-xs font-semibold uppercase tracking-wider rounded border ${statusStyles[event.status]}`}>
-              {event.status === 'upcoming' ? 'Upcoming' : event.status === 'live' ? 'LIVE' : 'Past'}
-            </span>
-            <span className="inline-block px-3 py-1 text-xs font-semibold uppercase tracking-wider text-foreground-muted bg-surface-elevated rounded border border-brand-600/10">
-              {event.time.split('–')[0].trim()}
-            </span>
-          </div>
-
-          <h3 className="text-xl font-semibold text-brand-900 pr-20">{event.title}</h3>
-        </div>
-
-        <div className="p-6">
-          <p className="text-sm text-foreground-muted leading-relaxed mb-5">{event.description}</p>
-
-          <div className="space-y-3 mb-6 pt-4 border-t border-brand-600/10">
-            <div className="flex items-center gap-2 text-sm">
-              <svg className="w-4 h-4 text-brand-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
-              </svg>
-              <span className="text-brand-700 font-medium">{event.location}</span>
+    <Reveal delay={delay}>
+      <motion.div
+        whileHover={{ y: -6 }}
+        transition={{ duration: 0.3 }}
+        className="group h-full"
+      >
+        <div className="card-premium flex h-full flex-col overflow-hidden rounded-2xl">
+          <div className="relative border-b border-brand-100 p-6">
+            <div className="absolute top-4 right-4 flex h-16 w-16 flex-col items-center justify-center rounded-2xl bg-gradient-to-br from-brand-100 to-green-100">
+              <div className="text-[10px] font-semibold uppercase text-brand-500">{month}</div>
+              <div className="font-display text-2xl font-bold text-foreground">{day}</div>
             </div>
-            <div className="flex items-center gap-2 text-sm">
-              <svg className="w-4 h-4 text-brand-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.856-1.487M15 10a3 3 0 11-6 0 3 3 0 016 0z" />
-              </svg>
-              <span className="text-brand-700 font-medium">{event.attendees} interested</span>
+
+            <div className="mb-3 flex flex-wrap gap-2 pr-20">
+              <span
+                className={`inline-block rounded-full border px-3 py-1 text-xs font-semibold uppercase tracking-wider ${statusStyles[event.status]}`}
+              >
+                {event.status === 'upcoming' ? 'Upcoming' : event.status === 'live' ? 'LIVE' : 'Past'}
+              </span>
+              <span className="inline-block rounded-full border border-brand-100 bg-surface-elevated px-3 py-1 text-xs font-semibold uppercase tracking-wider text-foreground-muted">
+                {event.time.split('–')[0].trim()}
+              </span>
             </div>
+
+            <h3 className="pr-20 text-xl font-semibold text-foreground">{event.title}</h3>
           </div>
 
-          <button
-            type="button"
-            onClick={onRegister}
-            className="w-full px-4 py-3 bg-brand-500 text-white text-sm font-semibold rounded-2xl transition-all duration-300 hover:bg-brand-600 hover:shadow-lg hover:shadow-brand-500/20"
-          >
-            {event.status === 'past' ? 'Closed' : 'Register Now'}
-          </button>
+          <div className="flex flex-1 flex-col p-6">
+            <p className="mb-5 flex-1 text-sm leading-relaxed text-foreground-muted">
+              {event.description}
+            </p>
+
+            <div className="mb-6 space-y-3 border-t border-brand-100 pt-4">
+              <div className="flex items-center gap-2 text-sm">
+                <svg className="h-4 w-4 text-brand-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                </svg>
+                <span className="font-medium text-foreground">{event.location}</span>
+              </div>
+              <div className="flex items-center gap-2 text-sm">
+                <svg className="h-4 w-4 text-brand-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.856-1.487M15 10a3 3 0 11-6 0 3 3 0 016 0z" />
+                </svg>
+                <span className="font-medium text-foreground">{event.attendees} interested</span>
+              </div>
+            </div>
+
+            <Button
+              type="button"
+              variant={event.status === 'past' ? 'secondary' : 'primary'}
+              className="w-full"
+              onClick={onRegister}
+            >
+              {event.status === 'past' ? 'Closed' : 'Register Now'}
+            </Button>
+          </div>
         </div>
-      </div>
-    </div>
+      </motion.div>
+    </Reveal>
   )
 }
 
@@ -137,64 +116,70 @@ function RegistrationModal({ event, onClose, onSubmit }) {
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 p-4">
-      <div className="w-full max-w-2xl rounded-[32px] bg-white p-8 shadow-2xl shadow-brand-900/20">
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      className="fixed inset-0 z-50 flex items-center justify-center bg-foreground/60 p-4 backdrop-blur-sm"
+    >
+      <motion.div
+        initial={{ opacity: 0, scale: 0.95, y: 20 }}
+        animate={{ opacity: 1, scale: 1, y: 0 }}
+        exit={{ opacity: 0, scale: 0.95, y: 20 }}
+        transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
+        className="w-full max-w-2xl rounded-3xl border border-brand-100 bg-white p-8 shadow-2xl shadow-brand-900/10"
+      >
         <div className="mb-6 flex items-start justify-between gap-4">
           <div>
-            <h3 className="text-2xl font-semibold text-brand-900 mb-2">Register: {event.title}</h3>
-            <p className="text-sm text-foreground-muted">Complete the form below and we’ll confirm your seat.</p>
+            <h3 className="mb-2 font-display text-2xl font-semibold text-foreground">
+              Register: {event.title}
+            </h3>
+            <p className="text-sm text-foreground-muted">
+              Complete the form below and we'll confirm your seat.
+            </p>
           </div>
           <button
             type="button"
             onClick={onClose}
-            className="rounded-full border border-brand-200 px-4 py-2 text-sm text-brand-700 transition hover:bg-brand-50"
+            className="rounded-full border border-brand-200 px-4 py-2 text-sm text-foreground-muted transition hover:bg-brand-50 hover:text-foreground"
           >
             Close
           </button>
         </div>
 
         <form onSubmit={handleSubmit} className="grid gap-4">
-          <input
+          <Input
             value={name}
             onChange={(e) => setName(e.target.value)}
             name="name"
             placeholder="Full name"
-            className="w-full rounded-2xl border border-brand-200 bg-surface px-4 py-3 text-sm text-foreground outline-none transition focus:border-brand-400"
+            required
           />
-          <input
+          <Input
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             name="email"
             type="email"
             placeholder="Email"
-            className="w-full rounded-2xl border border-brand-200 bg-surface px-4 py-3 text-sm text-foreground outline-none transition focus:border-brand-400"
+            required
           />
-          <input
+          <Input
             value={phone}
             onChange={(e) => setPhone(e.target.value)}
             name="phone"
             placeholder="Phone (optional)"
-            className="w-full rounded-2xl border border-brand-200 bg-surface px-4 py-3 text-sm text-foreground outline-none transition focus:border-brand-400"
           />
           <div className="flex flex-col gap-3 sm:flex-row sm:justify-end">
-            <button
-              type="button"
-              onClick={onClose}
-              className="rounded-2xl border border-brand-200 bg-white px-5 py-3 text-sm text-brand-700 transition hover:bg-brand-50"
-            >
+            <Button type="button" variant="secondary" onClick={onClose}>
               Cancel
-            </button>
-            <button
-              type="submit"
-              disabled={submitting}
-              className="rounded-2xl bg-brand-500 px-5 py-3 text-sm font-semibold text-white transition hover:bg-brand-600 disabled:cursor-not-allowed disabled:bg-brand-300"
-            >
+            </Button>
+            <Button type="submit" variant="primary" disabled={submitting}>
               {submitting ? 'Registering…' : 'Submit Registration'}
-            </button>
+            </Button>
           </div>
         </form>
-      </div>
-    </div>
+      </motion.div>
+    </motion.div>
   )
 }
 
@@ -251,55 +236,61 @@ export default function Events() {
   const filteredEvents = filter === 'all' ? events : events.filter((item) => item.status === filter)
 
   return (
-    <section id="events" className="relative overflow-hidden py-28 sm:py-32">
+    <section id="events" className="section-padding relative overflow-hidden bg-white">
       <div className="pointer-events-none absolute inset-0 mesh-gradient opacity-30" />
       <div className="section-container relative">
-        <div className="mb-16">
-          <span className="text-xs font-semibold uppercase tracking-widest text-brand-300 block mb-3">
-            Learning & Networking
-          </span>
-          <h2 className="text-4xl sm:text-5xl font-light font-display text-white mb-4 leading-tight">
-            Upcoming Events
-          </h2>
-          <p className="text-lg text-white/70 max-w-2xl leading-relaxed">
-            Join our webinars, workshops, and summits to stay updated on the latest trends in healthcare education and AI-driven innovation.
-          </p>
-        </div>
+        <SectionHeader
+          label="Learning & Networking"
+          title="Upcoming Events"
+          description="Join our webinars, workshops, and summits to stay updated on the latest trends in healthcare education and AI-driven innovation."
+        />
 
-        <div className="flex gap-3 mb-12 flex-wrap">
-          {['all', 'upcoming', 'past'].map((option) => (
-            <button
-              key={option}
-              type="button"
-              onClick={() => setFilter(option)}
-              className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-300 ${
-                filter === option
-                  ? 'bg-brand-500 text-white'
-                  : 'border border-brand-200 text-brand-700 hover:bg-brand-50'
-              }`}
-            >
-              {option === 'all' ? 'All Events' : option === 'upcoming' ? 'Upcoming' : 'Past Events'}
-            </button>
-          ))}
-        </div>
+        <Reveal delay={0.15}>
+          <div className="mt-10 flex flex-wrap gap-2">
+            {['all', 'upcoming', 'past'].map((option) => (
+              <button
+                key={option}
+                type="button"
+                onClick={() => setFilter(option)}
+                className={`rounded-full px-5 py-2.5 text-sm font-medium transition-all duration-300 ${
+                  filter === option
+                    ? 'btn-gradient text-foreground shadow-md shadow-brand-300/20'
+                    : 'border border-brand-200 bg-white text-foreground-muted hover:border-brand-300 hover:bg-brand-50'
+                }`}
+              >
+                {option === 'all' ? 'All Events' : option === 'upcoming' ? 'Upcoming' : 'Past Events'}
+              </button>
+            ))}
+          </div>
+        </Reveal>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="mt-12 grid grid-cols-1 gap-6 md:grid-cols-2">
           {filteredEvents.length > 0 ? (
             filteredEvents.map((event, index) => (
-              <EventCard key={event.id} event={event} delay={index * 0.1} onRegister={() => openRegister(event)} />
+              <EventCard
+                key={event.id}
+                event={event}
+                delay={index * 0.08}
+                onRegister={() => openRegister(event)}
+              />
             ))
           ) : (
-            <div className="col-span-2 text-center py-16">
-              <div className="text-4xl mb-4">📋</div>
-              <p className="text-white/70">No events matched that filter.</p>
+            <div className="col-span-2 py-16 text-center">
+              <p className="text-foreground-muted">No events matched that filter.</p>
             </div>
           )}
         </div>
       </div>
 
-      {modalOpen && activeEvent && (
-        <RegistrationModal event={activeEvent} onClose={() => setModalOpen(false)} onSubmit={handleModalSubmit} />
-      )}
+      <AnimatePresence>
+        {modalOpen && activeEvent && (
+          <RegistrationModal
+            event={activeEvent}
+            onClose={() => setModalOpen(false)}
+            onSubmit={handleModalSubmit}
+          />
+        )}
+      </AnimatePresence>
     </section>
   )
 }

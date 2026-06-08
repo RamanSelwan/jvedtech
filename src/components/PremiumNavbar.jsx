@@ -1,4 +1,6 @@
 import { useState, useEffect, useCallback } from 'react'
+import { motion, AnimatePresence } from 'framer-motion'
+import Button from './ui/Button'
 
 const NAV_LINKS = [
   { label: 'Home', sectionId: 'home' },
@@ -10,7 +12,7 @@ const NAV_LINKS = [
 ]
 
 const SECTION_IDS = NAV_LINKS.map((link) => link.sectionId)
-const NAV_OFFSET = 96
+const NAV_OFFSET = 88
 
 export default function PremiumNavbar() {
   const [isScrolled, setIsScrolled] = useState(false)
@@ -34,7 +36,7 @@ export default function PremiumNavbar() {
 
   useEffect(() => {
     const scrollHandler = () => {
-      setIsScrolled(window.scrollY > 50)
+      setIsScrolled(window.scrollY > 20)
       updateActiveSection()
     }
 
@@ -47,6 +49,13 @@ export default function PremiumNavbar() {
     updateActiveSection()
   }, [updateActiveSection])
 
+  useEffect(() => {
+    document.body.style.overflow = isMobileMenuOpen ? 'hidden' : ''
+    return () => {
+      document.body.style.overflow = ''
+    }
+  }, [isMobileMenuOpen])
+
   const handleNavClick = (sectionId) => {
     setIsMobileMenuOpen(false)
     setActiveSection(sectionId)
@@ -54,73 +63,33 @@ export default function PremiumNavbar() {
 
   return (
     <>
-      <nav
-        style={{
-          position: 'fixed',
-          top: 0,
-          left: 0,
-          right: 0,
-          zIndex: 1000,
-          backdropFilter: isScrolled ? 'blur(12px)' : 'blur(4px)',
-          background: isScrolled
-            ? 'rgba(15, 35, 25, 0.85)'
-            : 'rgba(15, 35, 25, 0.4)',
-          borderBottom: isScrolled ? '1px solid rgba(78, 205, 196, 0.2)' : 'none',
-          transition: 'all 0.3s cubic-bezier(0.16, 1, 0.3, 1)',
-          padding: isScrolled ? '12px 32px' : '20px 32px',
-        }}
+      <motion.nav
+        initial={{ y: -20, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+        className={`fixed inset-x-0 top-0 z-[1000] transition-all duration-300 ${
+          isScrolled
+            ? 'border-b border-brand-200/40 bg-white/85 py-3 shadow-sm shadow-brand-900/5 backdrop-blur-xl'
+            : 'border-b border-transparent bg-white/60 py-4 backdrop-blur-md'
+        }`}
         role="navigation"
         aria-label="Main navigation"
       >
-        <div
-          style={{
-            maxWidth: '1400px',
-            margin: '0 auto',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-          }}
-        >
+        <div className="section-container flex items-center justify-between">
           <a
             href="#home"
             onClick={() => handleNavClick('home')}
-            style={{
-              fontSize: '18px',
-              fontWeight: 700,
-              background: 'linear-gradient(135deg, #4ecdc4, #88d8b0)',
-              WebkitBackgroundClip: 'text',
-              WebkitTextFillColor: 'transparent',
-              backgroundClip: 'text',
-              textDecoration: 'none',
-              cursor: 'pointer',
-              display: 'flex',
-              alignItems: 'center',
-              gap: '8px',
-              transition: 'opacity 0.3s ease',
-            }}
-            onMouseEnter={(e) => (e.currentTarget.style.opacity = '0.8')}
-            onMouseLeave={(e) => (e.currentTarget.style.opacity = '1')}
+            className="group flex items-center gap-3 no-underline"
           >
-            <span
-              style={{
-                width: '32px',
-                height: '32px',
-                borderRadius: '8px',
-                background: 'linear-gradient(135deg, #4ecdc4, #88d8b0)',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                color: '#fff',
-                fontSize: '14px',
-                fontWeight: 700,
-              }}
-            >
+            <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-brand-300 to-green-300 text-sm font-bold text-foreground shadow-md shadow-brand-300/30 transition-transform duration-300 group-hover:scale-105">
               JV
             </span>
-            JVEDTECH
+            <span className="font-display text-lg font-bold tracking-tight text-foreground">
+              JVED<span className="text-gradient">TECH</span>
+            </span>
           </a>
 
-          <div className="hidden md:flex items-center gap-8">
+          <div className="hidden items-center gap-1 md:flex">
             {NAV_LINKS.map((link) => {
               const isActive = activeSection === link.sectionId
               return (
@@ -128,65 +97,79 @@ export default function PremiumNavbar() {
                   key={link.label}
                   href={`#${link.sectionId}`}
                   onClick={() => handleNavClick(link.sectionId)}
-                  style={{
-                    color: isActive ? '#4ecdc4' : 'rgba(255,255,255,0.7)',
-                    textDecoration: 'none',
-                    fontSize: '13px',
-                    fontWeight: 500,
-                    padding: '8px 16px',
-                    borderRadius: '6px',
-                    cursor: 'pointer',
-                    transition: 'all 0.3s ease',
-                    background: isActive ? 'rgba(78, 205, 196, 0.15)' : 'transparent',
-                    borderBottom: isActive ? '2px solid #4ecdc4' : '2px solid transparent',
-                  }}
-                  onMouseEnter={(e) => {
-                    e.currentTarget.style.color = '#4ecdc4'
-                    e.currentTarget.style.background = 'rgba(78, 205, 196, 0.1)'
-                  }}
-                  onMouseLeave={(e) => {
-                    if (!isActive) {
-                      e.currentTarget.style.color = 'rgba(255,255,255,0.7)'
-                      e.currentTarget.style.background = 'transparent'
-                    }
-                  }}
+                  className={`relative rounded-full px-4 py-2 text-sm font-medium transition-all duration-300 ${
+                    isActive
+                      ? 'text-foreground'
+                      : 'text-foreground-muted hover:text-foreground'
+                  }`}
                 >
-                  {link.label}
+                  {isActive && (
+                    <motion.span
+                      layoutId="nav-pill"
+                      className="absolute inset-0 rounded-full bg-brand-100/80"
+                      transition={{ type: 'spring', stiffness: 380, damping: 30 }}
+                    />
+                  )}
+                  <span className="relative z-10">{link.label}</span>
                 </a>
               )
             })}
+            <Button href="#community" variant="primary" className="ml-4 px-5 py-2.5 text-xs">
+              Join Community
+            </Button>
           </div>
 
           <button
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-            className="md:hidden rounded-lg border border-brand-300/30 bg-white/10 px-4 py-2 text-brand-200 hover:bg-white/15"
+            className="flex h-10 w-10 items-center justify-center rounded-xl border border-brand-200/60 bg-white/80 text-foreground transition hover:bg-brand-50 md:hidden"
             aria-label="Toggle mobile menu"
             aria-expanded={isMobileMenuOpen}
           >
-            ☰
+            <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              {isMobileMenuOpen ? (
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+              ) : (
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+              )}
+            </svg>
           </button>
         </div>
-      </nav>
+      </motion.nav>
 
-      {isMobileMenuOpen && (
-        <div className="fixed top-[76px] left-0 right-0 z-50 bg-[#0f2319de] backdrop-blur-xl border-b border-brand-600/20 p-4 md:hidden">
-          {NAV_LINKS.map((link) => {
-            const isActive = activeSection === link.sectionId
-            return (
-              <a
-                key={link.label}
-                href={`#${link.sectionId}`}
-                onClick={() => handleNavClick(link.sectionId)}
-                className={`block rounded-2xl px-4 py-3 text-sm font-medium transition ${
-                  isActive ? 'bg-brand-500/15 text-brand-200' : 'text-white/80 hover:bg-white/10'
-                }`}
-              >
-                {link.label}
-              </a>
-            )
-          })}
-        </div>
-      )}
+      <AnimatePresence>
+        {isMobileMenuOpen && (
+          <motion.div
+            initial={{ opacity: 0, y: -8 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -8 }}
+            transition={{ duration: 0.25 }}
+            className="fixed inset-x-0 top-[72px] z-[999] border-b border-brand-200/40 bg-white/95 p-4 shadow-lg backdrop-blur-xl md:hidden"
+          >
+            <div className="flex flex-col gap-1">
+              {NAV_LINKS.map((link) => {
+                const isActive = activeSection === link.sectionId
+                return (
+                  <a
+                    key={link.label}
+                    href={`#${link.sectionId}`}
+                    onClick={() => handleNavClick(link.sectionId)}
+                    className={`rounded-xl px-4 py-3 text-sm font-medium transition ${
+                      isActive
+                        ? 'bg-brand-100 text-foreground'
+                        : 'text-foreground-muted hover:bg-brand-50 hover:text-foreground'
+                    }`}
+                  >
+                    {link.label}
+                  </a>
+                )
+              })}
+              <Button href="#community" variant="primary" className="mt-2 w-full">
+                Join Community
+              </Button>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </>
   )
 }

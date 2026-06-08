@@ -1,5 +1,5 @@
 export function scrollToSection(sectionId) {
-  const navOffset = 96
+  const navOffset = 88
 
   if (sectionId === 'home') {
     window.scrollTo({ top: 0, behavior: 'smooth' })
