@@ -1,5 +1,7 @@
+import { motion } from 'framer-motion'
 import SectionHeader from './ui/SectionHeader'
 import AnimatedIconBox from './ui/AnimatedIconBox'
+import Reveal from './ui/Reveal'
 import {
   IconEducation,
   IconAI,
@@ -54,7 +56,7 @@ const SERVICES = [
     animation: 'globe',
     title: 'In-Home Wellness',
     description:
-      'Our In-Home Wellness services redefine patient care by bringing top-notch medical services into the comfort of patients’ homes.',
+      "Our In-Home Wellness services redefine patient care by bringing top-notch medical services into the comfort of patients' homes.",
     highlights: [
       'Home Health Monitoring for continuous tracking of health metrics with advanced technology.',
       'Nursing and Caregiver Services delivered by skilled professionals for personalized support.',
@@ -92,54 +94,56 @@ const SERVICES = [
 
 export default function Services() {
   return (
-    <section id="services" className="section-padding relative overflow-hidden">
-      <div className="pointer-events-none absolute inset-0 mesh-gradient opacity-30" />
+    <section id="services" className="section-padding relative overflow-hidden bg-surface-elevated">
+      <div className="pointer-events-none absolute inset-0 mesh-gradient opacity-40" />
       <div className="section-container relative">
-        <div className="mb-12 max-w-3xl">
+        <div className="mb-14 max-w-3xl">
           <SectionHeader
-            dark
             label="Our Services"
             title="We Are at the Forefront of Healthcare"
             description="We deliver exceptional services in education, patient care, digital advertising, and medical innovation to empower growth, accessibility, and transformation."
           />
-          <p className="mt-6 text-base leading-relaxed text-white/75">
-            JVEDTECH Medovation is at the forefront of the healthcare sector, delivering exceptional services in education, patient care, digital advertising, and medical product import-export. We empower growth and transformation for healthcare organizations, professionals, and patients.
-          </p>
+          <Reveal delay={0.1}>
+            <p className="mt-6 text-base leading-relaxed text-foreground-muted">
+              JVEDTECH Medovation is at the forefront of the healthcare sector, delivering exceptional services in education, patient care, digital advertising, and medical product import-export. We empower growth and transformation for healthcare organizations, professionals, and patients.
+            </p>
+          </Reveal>
         </div>
 
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {SERVICES.map((service, i) => {
             const Icon = service.icon
             return (
-              <article
-                key={service.title}
-                className={`reveal reveal-delay-${(i % 3) + 1} group relative overflow-hidden rounded-3xl border border-white/10 bg-white/5 backdrop-blur-xl p-7 transition duration-500 hover:-translate-y-1 hover:border-white/20 hover:bg-white/10`}
-              >
-                <div className="card-shine pointer-events-none absolute inset-0 opacity-0 transition group-hover:opacity-100" />
+              <Reveal key={service.title} delay={(i % 3) * 0.1}>
+                <motion.article
+                  whileHover={{ y: -6 }}
+                  transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
+                  className="group relative flex h-full flex-col overflow-hidden rounded-2xl border border-brand-100/80 bg-white p-7 shadow-sm transition-shadow duration-300 hover:border-brand-200 hover:shadow-xl hover:shadow-brand-200/30"
+                >
+                  <div className="card-shine pointer-events-none absolute inset-0 opacity-0 transition group-hover:opacity-100" />
 
-                <div className="relative">
-                  <AnimatedIconBox animation={service.animation}>
-                    <Icon />
-                  </AnimatedIconBox>
+                  <div className="relative flex flex-1 flex-col">
+                    <AnimatedIconBox animation={service.animation}>
+                      <Icon />
+                    </AnimatedIconBox>
 
-                  <h3 className="mt-5 text-xl font-semibold text-white">
-                    {service.title}
-                  </h3>
+                    <h3 className="mt-5 text-xl font-semibold text-foreground">{service.title}</h3>
 
-                  <p className="mt-3 text-sm leading-relaxed text-white/70">
-                    {service.description}
-                  </p>
+                    <p className="mt-3 text-sm leading-relaxed text-foreground-muted">
+                      {service.description}
+                    </p>
 
-                  <ul className="mt-5 space-y-3 text-sm text-white/70">
-                    {service.highlights.map((item) => (
-                      <li key={item} className="flex items-start gap-3">
-                        <span className="mt-1 inline-flex h-2.5 w-2.5 rounded-full bg-brand-300" />
-                        <span>{item}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              </article>
+                    <ul className="mt-5 flex-1 space-y-3 text-sm text-foreground-muted">
+                      {service.highlights.map((item) => (
+                        <li key={item} className="flex items-start gap-3">
+                          <span className="mt-1.5 inline-flex h-1.5 w-1.5 shrink-0 rounded-full bg-gradient-to-r from-brand-400 to-green-400" />
+                          <span>{item}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                </motion.article>
+              </Reveal>
             )
           })}
         </div>
