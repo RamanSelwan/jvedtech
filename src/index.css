@@ -1,9 +1,12 @@
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700;800&display=swap');
 @import 'tailwindcss';
+
+
 
 @theme {
   --font-sans: 'Inter', system-ui, sans-serif;
-  --font-display: 'Plus Jakarta Sans', 'Inter', system-ui, sans-serif;
-
+  --font-display: 'DM Sans', sans-serif;
+  
   /* Brand palette */
   --color-blue: #7dd3fc;
   --color-green: #86efac;
@@ -143,7 +146,7 @@
   }
 
   .card-premium {
-    @apply rounded-2xl border border-brand-100/80 bg-white shadow-sm shadow-brand-900/5 transition-all duration-300;
+    @apply rounded-2xl border border-brand-100/80 bg-gradient-to-br from-white via-cyan-50 to-emerald-50 shadow-lg shadow-brand-200/20 transition-all duration-300;
   }
 
   .card-premium:hover {

@@ -7,12 +7,15 @@ const USE_VIDEO_BACKGROUND = true
 const HERO_VIDEO_SRC = '/bg-video.mp4'
 
 const headingWords = [
-  { text: 'Redefining Global', className: 'text-white' },
+  { text: 'Redefining Global', className: 'text-white drop-shadow-2xl' },
   {
     text: 'Healthcare Learning.',
-    className: 'text-gradient-accent',
+    className: 'text-gradient-accent drop-shadow-2xl',
   },
-  { text: 'Where compassion meets technology.', className: 'italic text-white/90' },
+  {
+    text: 'Where compassion meets technology.',
+    className: 'italic text-white/90 drop-shadow-xl',
+  },
 ]
 
 export default function HomeScreen() {
@@ -40,9 +43,26 @@ export default function HomeScreen() {
 
       tl.from('.hero-content', { opacity: 0, duration: 1.2 })
         .from('.hero-badge', { opacity: 0, y: 16, duration: 0.55 }, 0.2)
-        .from('.hero-word', { opacity: 0, y: 24, duration: 0.55, stagger: 0.08 }, 0.35)
-        .from('.hero-sub', { opacity: 0, y: 20, duration: 0.6 }, 0.7)
-        .from('.hero-cta > *', { opacity: 0, y: 16, duration: 0.55, stagger: 0.1 }, 0.85)
+        .from('.hero-word', {
+  opacity: 0,
+  x: -200,
+  duration: 2.5,
+  stagger: 0.4,
+  ease: 'expo.out'
+}, 0.8)
+        .from('.hero-sub', {
+  opacity: 0,
+  x: -120,
+  duration: 2,
+  ease: 'expo.out'
+}, 2.2)
+        .from('.hero-cta > *', {
+  opacity: 0,
+  y: 50,
+  duration: 1.5,
+  stagger: 0.25,
+  ease: 'back.out(1.7)'
+}, 3)
     }, sectionRef)
 
     return () => ctx.revert()
@@ -77,9 +97,9 @@ export default function HomeScreen() {
       <div className="hero-content relative z-20 flex min-h-[calc(100vh-6rem)] items-center">
         <div className="section-container w-full max-w-7xl">
           <div className="grid grid-cols-1 items-center gap-10">
-            <div className="max-w-3xl space-y-8">
+            <div className="max-w-3xl space-y-8 backdrop-blur-[2px] rounded-3xl p-6 border border-white/10 bg-black/10">
               <div className="space-y-5">
-                <div className="hero-badge inline-flex items-center gap-2.5 rounded-full border border-white/15 bg-white/10 px-4 py-2 backdrop-blur-md">
+                <div className="hero-badge inline-flex items-center gap-2.5 rounded-full border border-white/20 bg-white/15 px-5 py-2.5 shadow-2xl shadow-brand-300/20 backdrop-blur-md">
                   <span className="relative flex size-2">
                     <span className="absolute inline-flex size-full animate-ping rounded-full bg-green-300 opacity-60" />
                     <span className="relative inline-flex size-2 rounded-full bg-green-300" />
@@ -89,12 +109,12 @@ export default function HomeScreen() {
                   </span>
                 </div>
 
-                <h1 className="font-display max-w-4xl text-balance text-4xl font-bold leading-[1.05] text-white sm:text-5xl lg:text-6xl xl:text-[4.25rem]">
+                <h1 className="font-display max-w-4xl text-balance text-5xl font-extrabold leading-[1.05] text-white sm:text-5xl lg:text-6xl xl:text-[4.25rem]">
                   <span className="inline-flex flex-wrap items-center gap-x-3 gap-y-2">
                     {headingWords.map((word, index) => (
                       <span
                         key={word.text + index}
-                        className={`hero-word inline-block ${word.className}`}
+                        className={`hero-word inline-block will-change-transform ${word.className}`}
                       >
                         {word.text}
                       </span>

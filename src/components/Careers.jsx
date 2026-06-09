@@ -10,7 +10,7 @@ function ValueCard({ value, delay }) {
   return (
     <Reveal delay={delay}>
       <motion.div whileHover={{ y: -4 }} transition={{ duration: 0.25 }} className="h-full">
-        <div className="h-full rounded-2xl border border-emerald-200 bg-white p-8 shadow-sm hover:shadow-lg hover:shadow-emerald-200/30 transition-all duration-300">
+        <div className="h-full rounded-2xl border border-emerald-200 shadow-xl shadow-black/10 p-8 border border-white/10 shadow-xl shadow-black/10 hover:shadow-lg hover:shadow-emerald-200/30 transition-all duration-300">
           <div className="mb-4 text-3xl">{value.icon}</div>
           <h3 className="mb-2 font-display text-lg font-semibold text-foreground">{value.title}</h3>
           <p className="text-sm leading-relaxed text-foreground-muted">{value.description}</p>
@@ -37,16 +37,16 @@ function JobCard({ job, index }) {
     <Reveal delay={index * 0.08}>
       <motion.div
         layout
-        className="overflow-hidden rounded-2xl border border-emerald-200 bg-white shadow-sm hover:shadow-lg hover:shadow-emerald-200/40 transition-all duration-300"
+        className="overflow-hidden rounded-2xl border border-emerald-200 shadow-xl shadow-black/10 shadow-xl shadow-black/10 hover:shadow-lg hover:shadow-emerald-200/40 transition-all duration-300"
       >
         <button
           type="button"
           onClick={() => setExpanded(!expanded)}
-          className="flex w-full items-start justify-between gap-4 p-6 text-left transition-colors hover:bg-brand-50/50"
+          className="flex w-full items-start justify-between gap-4 p-6 text-left transition-colors hover:bg-white/10"
         >
           <div className="flex-1">
             <div className="mb-3 flex flex-wrap gap-2">
-              <span className="inline-block rounded-full bg-brand-50 px-3 py-1 text-xs font-semibold uppercase tracking-wider text-brand-700">
+              <span className="inline-block rounded-full bg-white/10 px-3 py-1 text-xs font-semibold uppercase tracking-wider text-brand-700">
                 {job.department}
               </span>
               <span className="inline-block rounded-full bg-surface-muted px-3 py-1 text-xs font-semibold uppercase tracking-wider text-foreground-muted">
@@ -224,7 +224,7 @@ export default function Careers() {
             </Reveal>
 
             <Reveal delay={0.15}>
-              <div id="apply-form" className="rounded-3xl border border-emerald-200 bg-white p-8 shadow-sm">
+              <div id="apply-form" className="rounded-3xl border border-emerald-200 shadow-xl shadow-black/10 p-8 border border-white/50 shadow-xl shadow-black/10">
                 <h3 className="mb-2 text-xl font-semibold text-foreground">Submit Your Application</h3>
                 <p className="mb-6 text-sm text-foreground-muted">
                   Complete the form and our team will be in touch shortly.
